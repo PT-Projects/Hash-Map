@@ -3,6 +3,7 @@ import java.util.LinkedList;
 public class HashTable<K,V> {
 
     private LinkedList<Entry<K,V>> table [];
+    private double load;
 
     private static class Entry<K, V> {
         private K key;
@@ -33,6 +34,7 @@ public class HashTable<K,V> {
 
     public HashTable(int init, double loadFac){
 
+        load = loadFac;
         table = new LinkedList[init];
 
         for(int i = 0; i < init; i++) {
@@ -53,6 +55,18 @@ public class HashTable<K,V> {
                 }
             }
         }
+
+        int counter = 0;
+        for (LinkedList l: table){
+            if (l.size() >= 1){
+                counter++;
+            }
+        }
+
+        if (counter/size() >= load){
+            rehash();
+        }
+
         return value;
     }
 
@@ -89,13 +103,13 @@ public class HashTable<K,V> {
 
     @Override
     public String toString() {
-        String str = "";
+        String str = "[";
 
         for (int i = 0; i < table.length; i++){
-            str += table[i].toString();
+            str += table[i].toString() + ", ";
         }
 
-        return str;
+        return str.substring(0, str.length()-2) + "]";
 
     }
 
